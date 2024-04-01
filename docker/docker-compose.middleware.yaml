@@ -1,4 +1,9 @@
-version: '3'
+version: '3.1'
+volumes:
+  postgresql:
+  redis:
+  weaviate:
+
 services:
   # The postgres database.
   db:
@@ -12,7 +17,7 @@ services:
       # postgres data directory
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./volumes/db/data:/var/lib/postgresql/data
+      - postgresql:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -22,7 +27,7 @@ services:
     restart: always
     volumes:
       # Mount the redis data directory to the container.
-      - ./volumes/redis/data:/data
+      - redis:/data
     # Set the redis password when startup redis server.
     command: redis-server --requirepass difyai123456
     ports:
@@ -34,7 +39,7 @@ services:
     restart: always
     volumes:
       # Mount the Weaviate data directory to the container.
-      - ./volumes/weaviate:/var/lib/weaviate
+      - weaviate:/var/lib/weaviate
     environment:
       # The Weaviate configurations
       # You can refer to the [Weaviate](https://weaviate.io/developers/weaviate/config-refs/env-vars) documentation for more information.
